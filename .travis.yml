@@ -1,0 +1,71 @@
+language: cpp
+
+matrix:
+    include:
+
+        ############ Linux build ############################
+
+        - name: Linux build
+          stage: build
+          os: linux # Ubuntu 14.04 at the time of writing
+
+          before_install: |
+              sudo apt update -y
+              sudo apt install -y software-properties-common
+              sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+              sudo apt update -y
+              sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
+
+          script: |
+              pwd
+              pushd .
+
+              # Build OpenSSL-1.0.2 from source
+              # TODO Figure out how to install this to a particular place
+              cd $HOME/Downloads
+              wget -q https://www.openssl.org/source/openssl-1.0.2n.tar.gz
+              tar xf openssl-1.0.2n.tar.gz
+              cd $HOME/Downloads/openssl-1.0.2n
+              ./config --shared # TODO Should build static libs
+              make -j ${NCPU:-4}
+              sudo make install
+
+              popd
+
+              # Build gcs
+              # TODO Build with static openssl libs
+
+              # These are the default openssl out dirs - may need to change these
+              # These env vars are set so cmake knows where to find the libs
+              export OPENSSL_ROOT_DIR=/usr/local/ssl
+              export PKG_CONFIG_PATH=/usr/local/ssl/lib/pkgconfig
+
+              # Actually build gcs
+              cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              cmake --build cmake-out -- -j ${NCPU:-4}
+
+              ls -la cmake-out
+
+          after_success:
+              echo "Build successful"
+
+        ############ Mac build ##############################
+
+        - name: Mac build
+          stage: build
+          os: osx
+
+          before_install: |
+              brew install curl cmake libressl c-ares
+
+          script:
+              pwd
+
+              export OPENSSL_ROOT_DIR=/usr/local/opt/libressl
+              cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              cmake --build cmake-out -- -j ${NCPU:-4}
+
+              ls -la cmake-out
+
+          after_success:
+              echo "Build successful"
