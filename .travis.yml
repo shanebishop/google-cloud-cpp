@@ -9,12 +9,12 @@ matrix:
           stage: build
           os: linux # Ubuntu 14.04 at the time of writing
 
-          before_install: |
-              sudo apt update -y
-              sudo apt install -y software-properties-common
-              sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-              sudo apt update -y
-              sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
+          before_install:
+              #- sudo apt update -y
+              - sudo apt install -y software-properties-common
+              - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+              - sudo apt update -y
+              - sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
 
           script: |
               pwd
@@ -56,7 +56,8 @@ matrix:
           os: osx
 
           before_install: |
-              brew install curl cmake libressl c-ares
+              #brew install curl cmake libressl c-ares
+              brew install curl libressl c-ares
 
           script:
               pwd
