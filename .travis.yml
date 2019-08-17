@@ -13,16 +13,16 @@ matrix:
               - sudo apt update -y
               - sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev libssl-dev make pkg-config tar wget zlib1g-dev
 
-              # Install cmake
-              - gzipFilename="cmake-3.12.4-Linux-x86_64"
-              - wget -q "https://cmake.org/files/v3.12/$gzipFilename.tar.gz"
-              - tar -xzf "$gzipFilename.tar.gz"
-              - mv "$gzipFilename" cmake
-              - sudo mv cmake /usr/local/bin
-              - export PATH="$PATH:/usr/local/bin/cmake/bin"
-
-              #- sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
-              - sudo apt install -y git gcc g++ make pkg-config tar wget zlib1g-dev
+              # # Install cmake
+              # - gzipFilename="cmake-3.12.4-Linux-x86_64"
+              # - wget -q "https://cmake.org/files/v3.12/$gzipFilename.tar.gz"
+              # - tar -xzf "$gzipFilename.tar.gz"
+              # - mv "$gzipFilename" cmake
+              # - sudo mv cmake /usr/local/bin
+              # - export PATH="$PATH:/usr/local/bin/cmake/bin"
+              #
+              # #- sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
+              # - sudo apt install -y git gcc g++ make pkg-config tar wget zlib1g-dev
 
           script:
               - pwd
