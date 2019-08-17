@@ -57,7 +57,9 @@ matrix:
               - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
+              - ls
               - ls -la cmake-out
+              - ls -la cmake-out/build
 
           after_success:
               echo "Build successful"
@@ -81,7 +83,9 @@ matrix:
               - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
+              - ls
               - ls -la cmake-out
+              - ls -la cmake-out/build
 
           after_success:
               echo "Build successful"

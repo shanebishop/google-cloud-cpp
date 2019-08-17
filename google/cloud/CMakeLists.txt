@@ -49,7 +49,15 @@ set(DOXYGEN_EXCLUDE_PATTERNS
     "*/google/cloud/*_test.cc")
 set(DOXYGEN_EXCLUDE_SYMBOL "internal")
 
-include(GoogleCloudCppCommon)
+#include(GoogleCloudCppCommon)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    message("Trying ../../GoogleCloudCppCommon.cmake, since on Linux")
+    #include(GoogleCloudCppCommon)
+    include(../../GoogleCloudCppCommon.cmake)
+else()
+    message("Not on Linux, so using regular include")
+    include(GoogleCloudCppCommon)
+endif()
 
 # Define an interface library, i.e., a library that really has no sources, and
 # add public target options to it.  The targets then use the library via
