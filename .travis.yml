@@ -53,7 +53,8 @@ matrix:
               - export PKG_CONFIG_PATH=/usr/local/ssl/lib/pkgconfig
 
               # Actually build gcs
-              - cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
               - ls -la cmake-out
@@ -76,7 +77,8 @@ matrix:
               - cmake --version
 
               - export OPENSSL_ROOT_DIR=/usr/local/opt/libressl
-              - cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
+              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
               - ls -la cmake-out
