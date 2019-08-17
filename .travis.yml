@@ -7,14 +7,11 @@ matrix:
 
         - name: Linux build
           stage: build
-          os: linux # Ubuntu 14.04 at the time of writing
+          os: linux # Defaults to Ubuntu 16.04 at the time of writing - use `dist` to specify a different dist
 
           before_install:
-              #- sudo apt update -y
-              - sudo apt install -y software-properties-common
-              - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
               - sudo apt update -y
-              - apt search cmake*
+              - sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev libssl-dev make pkg-config tar wget zlib1g-dev
 
               # Install cmake
               - gzipFilename="cmake-3.12.4-Linux-x86_64"
@@ -31,26 +28,29 @@ matrix:
               - pwd
               - pushd .
 
-              # Build OpenSSL-1.0.2 from source
-              # TODO Figure out how to install this to a particular place
-              - mkdir -p "$HOME/Downloads"
-              - cd $HOME/Downloads
-              - wget -q https://www.openssl.org/source/openssl-1.0.2n.tar.gz
-              - tar xf openssl-1.0.2n.tar.gz
-              - cd $HOME/Downloads/openssl-1.0.2n
-              - ./config --shared # TODO Should build static libs
-              - make -j ${NCPU:-4}
-              - sudo make install
+              # # Build OpenSSL-1.0.2 from source
+              # # TODO Figure out how to install this to a particular place
+              # - mkdir -p "$HOME/Downloads"
+              # - cd $HOME/Downloads
+              # - wget -q https://www.openssl.org/source/openssl-1.0.2n.tar.gz
+              # - tar xf openssl-1.0.2n.tar.gz
+              # - cd $HOME/Downloads/openssl-1.0.2n
+              # - ./config --shared # TODO Should build static libs
+              # - make -j ${NCPU:-4}
+              # - sudo make install
 
               - popd
+
+              - openssl version
+              - cmake --version
 
               # Build gcs
               # TODO Build with static openssl libs
 
               # These are the default openssl out dirs - may need to change these
               # These env vars are set so cmake knows where to find the libs
-              - export OPENSSL_ROOT_DIR=/usr/local/ssl
-              - export PKG_CONFIG_PATH=/usr/local/ssl/lib/pkgconfig
+              # - export OPENSSL_ROOT_DIR=/usr/local/ssl
+              # - export PKG_CONFIG_PATH=/usr/local/ssl/lib/pkgconfig
 
               # Actually build gcs
               #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
