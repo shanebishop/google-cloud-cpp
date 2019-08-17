@@ -14,6 +14,7 @@ matrix:
               - sudo apt install -y software-properties-common
               - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
               - sudo apt update -y
+              - apt search cmake*
               - sudo apt install -y cmake3 git gcc g++ make pkg-config tar wget zlib1g-dev
 
           script: |
