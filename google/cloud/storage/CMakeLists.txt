@@ -230,9 +230,12 @@ target_link_libraries(storage_client
                              Crc32c::crc32c
                              CURL::libcurl
                              Threads::Threads
+                             dl
                              OpenSSL::SSL
+                             dl
                              OpenSSL::Crypto
                              ZLIB::ZLIB
+                             dl
                       PRIVATE storage_common_options)
 target_include_directories(storage_client
                            PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
