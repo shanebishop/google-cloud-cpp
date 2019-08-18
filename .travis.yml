@@ -42,14 +42,16 @@ matrix:
               - tar xf openssl-1.0.2j.tar.gz
               - cd $HOME/Downloads/openssl-1.0.2j
               #- ./config --shared # TODO Should build static libs
-              - ./config --prefix="$GCSSDK_3RDPARTY_HOME" --openssldir="$GCSSDK_3RDPARTY_HOME/openssl"
+              - ./config --prefix="$GCSSDK_3RDPARTY_HOME/ssl" --openssldir="$GCSSDK_3RDPARTY_HOME/openssl"
               - make -j ${NCPU:-4}
               #- sudo make install
               - make install
               - popd
 
               - openssl version
-              - tree -L 4 "$GCSSDK_3RDPARTY_HOME"
+              - tree -L 2 "$GCSSDK_3RDPARTY_HOME/ssl"
+              - tree -L 4 "$GCSSDK_3RDPARTY_HOME/ssl/lib"
+              - ls -la "$GCSSDK_3RDPARTY_HOME/ssl/lib/pkgconfig"
               - cmake --version
 
               # Build gcs
@@ -67,8 +69,8 @@ matrix:
               - ls "$PKG_CONFIG_PATH"
 
               # Actually build gcs
-              - cmake -H. -Bcmake-out -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON
-              #- cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF # The 'super' project downloads things, which I think we want to avoid - or do we only want to avoid ssl, and download everything else?
+              #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON
+              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF # The 'super' project downloads things, which I think we want to avoid - or do we only want to avoid ssl, and download everything else?
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
               - ls
