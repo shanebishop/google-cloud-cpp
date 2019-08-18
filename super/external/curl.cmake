@@ -63,6 +63,7 @@ if (NOT TARGET curl_project)
                    -DCMAKE_DEBUG_POSTFIX=
                    -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
                    -DCMAKE_INSTALL_RPATH=${GOOGLE_CLOUD_CPP_INSTALL_RPATH}
+                   -DCMAKE_VERBOSE_MAKEFILE=ON
         BUILD_COMMAND ${CMAKE_COMMAND}
                       --build
                       <BINARY_DIR>
