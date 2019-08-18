@@ -28,7 +28,7 @@ target_link_libraries(storage_bucket_acl_samples storage_client
 
 add_executable(storage_bucket_iam_samples storage_bucket_iam_samples.cc)
 target_link_libraries(storage_bucket_iam_samples storage_client
-                      storage_common_options)
+                      storage_common_options dl)
 
 if (BUILD_TESTING)
     add_executable(storage_client_mock_samples storage_client_mock_samples.cc)

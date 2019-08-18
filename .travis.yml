@@ -146,7 +146,6 @@ matrix:
               - ls
               - ls -la cmake-out
               - ls cmake-out/external/curl/src/curl_project-stamp/curl_project-build-*.log
-              - tree -L 3 cmake-out
               - ls -la cmake-out/build
               - ls -la cmake-out/build/google-cloud-cpp
 
