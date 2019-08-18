@@ -14,12 +14,21 @@ matrix:
               #- sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev libssl-dev make pkg-config tar wget zlib1g-dev
               - sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev make pkg-config tar wget zlib1g-dev
               - sudo apt install -y tree # This is not required
+
+              # Use g++ 7.x
+              - sudo apt-get install -y software-properties-common
+              - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+              - sudo apt update -y
               - sudo apt install gcc-7 g++-7 -y
-              - ln -s $(which g++) $(which g++-7)
-              - ln -s $(which gcc) $(which gcc-7)
+              - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+              - sudo update-alternatives --config gcc
               - command -v g++
+              - command -v g++-7
               - ls -l $(command -v g++)
+              - gcc --version
               - g++ --version
+              - export CXX=g++-7
+              - export CC=gcc-7
 
               # # Install cmake
               # - gzipFilename="cmake-3.12.4-Linux-x86_64"
