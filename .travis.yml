@@ -70,7 +70,9 @@ matrix:
 
               # Actually build gcs
               #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON
-              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF # The 'super' project downloads things, which I think we want to avoid - or do we only want to avoid ssl, and download everything else?
+              # The 'super' project downloads things, which I think we want to avoid
+              # - or do we only want to avoid ssl, and download everything else?
+              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
               - ls
