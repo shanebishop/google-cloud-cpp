@@ -18,6 +18,9 @@
 # to keep this particular file as simple as possible, as it is intended to be
 # part of the examples.
 
+# TODO Wrap this in a check for GNU CXX compiler
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ldl")
+
 add_executable(storage_bucket_samples storage_bucket_samples.cc)
 target_link_libraries(storage_bucket_samples storage_client
                       storage_common_options)
@@ -28,7 +31,7 @@ target_link_libraries(storage_bucket_acl_samples storage_client
 
 add_executable(storage_bucket_iam_samples storage_bucket_iam_samples.cc)
 target_link_libraries(storage_bucket_iam_samples storage_client
-                      storage_common_options dl)
+                      storage_common_options dl dl dl dl)
 
 if (BUILD_TESTING)
     add_executable(storage_client_mock_samples storage_client_mock_samples.cc)
