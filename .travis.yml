@@ -11,7 +11,9 @@ matrix:
 
           before_install:
               - sudo apt update -y
-              - sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev libssl-dev make pkg-config tar wget zlib1g-dev
+              #- sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev libssl-dev make pkg-config tar wget zlib1g-dev
+              - sudo apt install -y build-essential cmake git gcc g++ libcurl4-openssl-dev make pkg-config tar wget zlib1g-dev
+              - sudo apt install -y tree # This is not required
 
               # # Install cmake
               # - gzipFilename="cmake-3.12.4-Linux-x86_64"
@@ -26,22 +28,28 @@ matrix:
 
           script:
               - pwd
+
+              # Create GCSSDK_3RDPARTY_HOME
+              - export GCSSDK_3RDPARTY_HOME="$HOME/Workspace/thirdparty/gcssdk"
+              - mkdir -p "$GCSSDK_3RDPARTY_HOME"
+
+              # Build OpenSSL-1.0.2 from source
               - pushd .
-
-              # # Build OpenSSL-1.0.2 from source
-              # # TODO Figure out how to install this to a particular place
-              # - mkdir -p "$HOME/Downloads"
-              # - cd $HOME/Downloads
-              # - wget -q https://www.openssl.org/source/openssl-1.0.2n.tar.gz
-              # - tar xf openssl-1.0.2n.tar.gz
-              # - cd $HOME/Downloads/openssl-1.0.2n
-              # - ./config --shared # TODO Should build static libs
-              # - make -j ${NCPU:-4}
-              # - sudo make install
-
+              - mkdir -p "$HOME/Downloads"
+              - cd $HOME/Downloads
+              #- wget -q https://www.openssl.org/source/openssl-1.0.2n.tar.gz
+              - wget -q https://www.openssl.org/source/openssl-1.0.2j.tar.gz
+              - tar xf openssl-1.0.2j.tar.gz
+              - cd $HOME/Downloads/openssl-1.0.2j
+              #- ./config --shared # TODO Should build static libs
+              - ./config --prefix="$GCSSDK_3RDPARTY_HOME" --openssldir="$GCSSDK_3RDPARTY_HOME/openssl"
+              - make -j ${NCPU:-4}
+              #- sudo make install
+              - make install
               - popd
 
               - openssl version
+              - tree -L 4 "$GCSSDK_3RDPARTY_HOME"
               - cmake --version
 
               # Build gcs
@@ -52,14 +60,22 @@ matrix:
               # - export OPENSSL_ROOT_DIR=/usr/local/ssl
               # - export PKG_CONFIG_PATH=/usr/local/ssl/lib/pkgconfig
 
+              # These are my custom openssl out dirs (see above for defaults)
+              - export OPENSSL_ROOT_DIR="$GCSSDK_3RDPARTY_HOME"/ssl
+              - export PKG_CONFIG_PATH="$GCSSDK_3RDPARTY_HOME"/ssl/lib/pkgconfig
+              - ls "$OPENSSL_ROOT_DIR"
+              - ls "$PKG_CONFIG_PATH"
+
               # Actually build gcs
-              #- cmake -H. -Bcmake-out -DBUILD_TESTING=OFF
-              - cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF
+              - cmake -H. -Bcmake-out -DBUILD_TESTING=OFF -DCMAKE_VERBOSE_MAKEFILE=ON
+              #- cmake -Hsuper -Bcmake-out -DBUILD_TESTING=OFF # The 'super' project downloads things, which I think we want to avoid - or do we only want to avoid ssl, and download everything else?
               - cmake --build cmake-out -- -j ${NCPU:-4}
 
               - ls
               - ls -la cmake-out
+              - tree -L 4 cmake-out
               - ls -la cmake-out/build
+              - ls -la cmake-out/build/google-cloud-cpp
 
           after_success:
               echo "Build successful"
